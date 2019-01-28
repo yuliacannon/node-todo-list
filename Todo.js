@@ -13,5 +13,6 @@ const schema = Joi.object({
   done: Joi.boolean().required()
 });
 
+// converting Joi schema to a Mongoose-style schema
 const todo = new mongoose.Schema(Joigoose.convert(schema));
 module.exports = mongoose.model('Todo', todo);

@@ -1,9 +1,8 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-
 const mongoose = require('mongoose');
-
+const auth = require('basic-auth');
 const Todo = require('./Todo');
 
 // parse application/x-www-form-urlencoded
@@ -20,16 +19,20 @@ db.once('open', () => {
   console.log("CONNECTED TO DB");
 });
 
+
+// basic auth
 app.use((req, res, next) => {
-  if (req.headers.authorization === 'Bearer 123') {
-      console.log('Auth passed!')
-      next();
-  } else {
-      console.log('Auth failed');
+  const credentials = auth(req);
+  if (!credentials || credentials.name !== 'admin' || credentials.pass !== '1234'){
+    console.log('Auth failed');
       next({
           status: 403,
           error: 'You are not authorized!'
       });
+    
+  } else {
+    console.log('Auth passed!')
+    next();
   }
 });
 
@@ -80,13 +83,13 @@ app.delete('/todo/:id', (req, res, next) => {
 //  to mark todo item as done/undone
 
 app.put('/todo/:id', (req, res, next) => {
-  Todo.findById(req.params.id, function(err, todo) {
+  Todo.findById(req.params.id, (err, todo) => {
 
     if (err)
         res.send(err);
 
     todo.done = !todo.done;
-    todo.save(function(err) {
+    todo.save((err) => {
         if (err)
             res.send(err);
 

@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 
 const mongoose = require('mongoose');
+
 const Todo = require('./Todo');
 
 // parse application/x-www-form-urlencoded
@@ -60,6 +61,7 @@ app.post('/todo', (req, res) => {
       res.status(200).json(todo)
     }
   )
+  Todo.stat
 })
 
 // to remove todo item

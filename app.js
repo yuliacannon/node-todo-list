@@ -64,7 +64,7 @@ app.post('/todo', (req, res) => {
       res.status(200).json(todo)
     }
   )
-  Todo.stat
+  //Todo.stat
 })
 
 // to remove todo item
